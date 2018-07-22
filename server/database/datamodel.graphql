@@ -1,0 +1,10 @@
+interface Node {
+  id: ID! @unique
+}
+
+type User implements Node {
+  id: ID! @unique
+  email: String! @unique
+  firstName: String!
+  lastName: String!
+}

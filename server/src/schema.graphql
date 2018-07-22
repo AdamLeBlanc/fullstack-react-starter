@@ -1,0 +1,12 @@
+#import Node from "./generated/prisma.graphql"
+
+type Query {
+  user(id: ID!): User
+}
+
+type User implements Node {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+}

@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch ./src ./src/index.js"
+    "start": "nodemon -e js,graphql,yml,json ./src/index.js",
+    "up:dev": "docker-compose up -d",
+    "down:dev": "docker-compose down",
+    "db:migrate": "prisma deploy --env-file .env"
   },
   "author": "Adam LeBlanc",
   "license": "MIT",
