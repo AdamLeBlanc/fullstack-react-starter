@@ -16,7 +16,34 @@ async function signin(parent, args, context, info) {
   return user;
 }
 
+function createChatRoom(parent, args, context, info) {
+  return context.db.mutation.createChatRoom(
+    {
+      data: {
+        ...args,
+        users: { connect: { id: [context.user.id] } },
+      },
+    },
+    info
+  );
+}
+
+function sendMessage(parents, args, context, info) {
+  return context.db.mutation.createMessage(
+    {
+      data: {
+        body: args.body,
+        author: { connect: { id: context.user.id } },
+        chatRoom: { connect: { id: args.chatRoomId } },
+      },
+    },
+    info
+  );
+}
+
 module.exports = {
   signup,
   signin,
+  createChatRoom,
+  sendMessage,
 };

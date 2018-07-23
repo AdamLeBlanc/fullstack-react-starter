@@ -1,5 +1,5 @@
 # source: http://127.0.0.1:4466
-# timestamp: Sun Jul 22 2018 23:55:16 GMT-0300 (ADT)
+# timestamp: Mon Jul 23 2018 00:26:34 GMT-0300 (ADT)
 
 type AggregateChatRoom {
   count: Int!
@@ -22,6 +22,7 @@ type ChatRoom implements Node {
   id: ID!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  name: String!
 }
 
 """A connection to a list of items."""
@@ -35,6 +36,7 @@ type ChatRoomConnection {
 }
 
 input ChatRoomCreateInput {
+  name: String!
   users: UserCreateManyWithoutChatRoomsInput
   messages: MessageCreateManyWithoutChatRoomInput
 }
@@ -50,10 +52,12 @@ input ChatRoomCreateOneWithoutMessagesInput {
 }
 
 input ChatRoomCreateWithoutMessagesInput {
+  name: String!
   users: UserCreateManyWithoutChatRoomsInput
 }
 
 input ChatRoomCreateWithoutUsersInput {
+  name: String!
   messages: MessageCreateManyWithoutChatRoomInput
 }
 
@@ -69,6 +73,8 @@ type ChatRoomEdge {
 enum ChatRoomOrderByInput {
   id_ASC
   id_DESC
+  name_ASC
+  name_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -77,6 +83,7 @@ enum ChatRoomOrderByInput {
 
 type ChatRoomPreviousValues {
   id: ID!
+  name: String!
 }
 
 type ChatRoomSubscriptionPayload {
@@ -119,6 +126,7 @@ input ChatRoomSubscriptionWhereInput {
 }
 
 input ChatRoomUpdateInput {
+  name: String
   users: UserUpdateManyWithoutChatRoomsInput
   messages: MessageUpdateManyWithoutChatRoomInput
 }
@@ -141,10 +149,12 @@ input ChatRoomUpdateOneWithoutMessagesInput {
 }
 
 input ChatRoomUpdateWithoutMessagesDataInput {
+  name: String
   users: UserUpdateManyWithoutChatRoomsInput
 }
 
 input ChatRoomUpdateWithoutUsersDataInput {
+  name: String
   messages: MessageUpdateManyWithoutChatRoomInput
 }
 
@@ -213,6 +223,46 @@ input ChatRoomWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput

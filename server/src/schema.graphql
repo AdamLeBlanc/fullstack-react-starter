@@ -1,4 +1,4 @@
-#import Node, from "./generated/prisma.graphql"
+#import Node, ChatRoom from "./generated/prisma.graphql"
 
 type Query {
   user(id: ID!): User
@@ -13,6 +13,8 @@ type Mutation {
     password: String!
   ): User!
   signin(email: String!, password: String!): User!
+  createChatRoom(name: String!): ChatRoom!
+  sendMessage(chatRoomId: ID!, body: String!): Message!
 }
 
 type User implements Node {
@@ -20,4 +22,5 @@ type User implements Node {
   firstName: String!
   lastName: String!
   email: String!
+  chatRooms: [ChatRoom!]
 }

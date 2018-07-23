@@ -17,6 +17,7 @@ type ChatRoom implements Node {
   id: ID! @unique
   users: [User!]!
   messages: [Message!]!
+  name: String!
 }
 
 type Message implements Node {
