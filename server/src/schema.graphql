@@ -1,12 +1,22 @@
-#import Node from "./generated/prisma.graphql"
+#import Node, from "./generated/prisma.graphql"
 
 type Query {
   user(id: ID!): User
 }
 
+type Mutation {
+  signup(
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+  ): User!
+  signin(email: String!, password: String!): User!
+}
+
 type User implements Node {
   id: ID!
-  email: String!
   firstName: String!
   lastName: String!
+  email: String!
 }

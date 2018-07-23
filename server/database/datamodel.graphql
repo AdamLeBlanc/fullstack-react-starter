@@ -5,6 +5,9 @@ interface Node {
 type User implements Node {
   id: ID! @unique
   email: String! @unique
+  password: String!
   firstName: String!
   lastName: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

@@ -7,11 +7,13 @@
     "start": "nodemon -e js,graphql,yml,json ./src/index.js",
     "up:dev": "docker-compose up -d",
     "down:dev": "docker-compose down",
+    "db:reset": "prisma reset --env-file .env",
     "db:migrate": "prisma deploy --env-file .env"
   },
   "author": "Adam LeBlanc",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^6.0.0",
     "express-session": "^1.15.6",
     "graphql-cli": "^2.16.4",
