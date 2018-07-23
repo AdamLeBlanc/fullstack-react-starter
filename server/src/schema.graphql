@@ -8,19 +8,26 @@ type Query {
 }
 
 type Mutation {
-  signup(
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
-  ): User!
-  signin(email: String!, password: String!): User!
+  signup(input: SignupInput!): User!
+  signin(input: SigninInput): User!
 
   createChatRoom(name: String!): ChatRoom! @auth
   joinChatRoom(chatRoomId: ID!): ChatRoom @auth
   leaveChatRoom(chatRoomId: ID!): User! @auth
 
   sendMessage(chatRoomId: ID!, body: String!): Message! @auth
+}
+
+input SigninInput {
+  email: String!
+  password: String!
+}
+
+input SignupInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }
 
 type User implements Node {

@@ -20,8 +20,8 @@ const mocks = {
 
 describe('User Signup Mutation', () => {
   const query = `
-  mutation SignUp($FirstName: String! $LastName: String! $Email: String! $Password: String!){
-    signup(firstName: $FirstName, lastName: $LastName, email: $Email password: $Password) {
+  mutation SignUp($input: SignupInput!){
+    signup(input: $input) {
       id
       firstName
       lastName
@@ -33,15 +33,20 @@ describe('User Signup Mutation', () => {
   }
 `;
 
-  const mockSchema = makeExecutableSchema({ typeDefs });
+  const mockSchema = makeExecutableSchema({
+    typeDefs,
+    resolverValidationOptions: { requireResolversForResolveType: false },
+  });
   addMockFunctionsToSchema({ schema: mockSchema, mocks });
-  var variables;
+  let variables;
   beforeEach(() => {
     variables = {
-      FirstName: 'John',
-      LastName: 'Smith',
-      Password: 'password',
-      Email: 'example@example.com',
+      input: {
+        firstName: 'John',
+        lastName: 'Smith',
+        password: 'password',
+        email: 'example@example.com',
+      },
     };
   });
   describe('All Fields Submited', () => {
@@ -64,9 +69,13 @@ describe('User Signup Mutation', () => {
   });
 
   describe('Missing', () => {
+    let input;
+    beforeEach(() => {
+      input = variables.input;
+    });
     describe('firstName', () => {
       it('has errors', () => {
-        variables.FirstName = null;
+        input.firstName = null;
         return expect(
           graphql(mockSchema, query, null, {}, variables)
         ).resolves.toHaveProperty('errors');
@@ -74,7 +83,7 @@ describe('User Signup Mutation', () => {
     });
     describe('lastName', () => {
       it('has errors', () => {
-        variables.LastName = null;
+        input.lastName = null;
         return expect(
           graphql(mockSchema, query, null, {}, variables)
         ).resolves.toHaveProperty('errors');
@@ -82,7 +91,7 @@ describe('User Signup Mutation', () => {
     });
     describe('password', () => {
       it('has errors', () => {
-        variables.Password = null;
+        input.password = null;
         return expect(
           graphql(mockSchema, query, null, {}, variables)
         ).resolves.toHaveProperty('errors');
@@ -90,7 +99,7 @@ describe('User Signup Mutation', () => {
     });
     describe('email', () => {
       it('has errors', () => {
-        variables.Email = null;
+        input.email = null;
         return expect(
           graphql(mockSchema, query, null, {}, variables)
         ).resolves.toHaveProperty('errors');

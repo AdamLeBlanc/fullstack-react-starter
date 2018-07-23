@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 
-async function signup(parent, args, context, info) {
+async function signup(parent, { input }, context, info) {
   const { db } = context;
-  args.password = await bcrypt.hash(args.password, 10);
-  return db.mutation.createUser({ data: { ...args } }, info);
+  input.password = await bcrypt.hash(input.password, 10);
+  return db.mutation.createUser({ data: { ...input } }, info);
 }
 
 async function signin(parent, args, context, info) {
