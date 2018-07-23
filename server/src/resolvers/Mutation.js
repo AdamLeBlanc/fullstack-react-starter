@@ -8,7 +8,9 @@ async function signup(parent, { input }, context, info) {
 
 async function signin(parent, args, context, info) {
   const { db, req } = context;
-  const { email, password } = args;
+  const {
+    input: { email, password },
+  } = args;
   const user = await db.query.user({ where: { email } });
   const valid = bcrypt.compare(password, user.password);
   if (!valid) throw new Error('Wrong email/password');

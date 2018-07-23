@@ -1,9 +1,10 @@
 require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
-const session = require('express-session');
 const resolvers = require('./resolvers');
 const directiveResolvers = require('./directives');
+const sessionMiddleware = require('./middleware/session-middleware');
+const authMiddleware = require('./middleware/auth-middleware');
 const PRISMA_ENDPOINT = process.env.PRISMA_ENDPOINT;
 const PRISMA_SECRET = process.env.PRISMA_SECRET;
 
@@ -26,37 +27,9 @@ const server = new GraphQLServer({
 
 server.express.use(
   server.options.endpoint,
-  session({
-    secret: 'shhhhhhh',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 7,
-      sameSite: true,
-    },
-  })
+  sessionMiddleware,
+  authMiddleware(db, server)
 );
-
-server.express.use(server.options.endpoint, async (req, res, next) => {
-  if (!req.session.userId) {
-    return next();
-  }
-
-  const user = await db.query.user({
-    where: { id: req.session.userId },
-  });
-
-  if (user) {
-    const old = server.context;
-    server.context = req => ({
-      ...old(req),
-      user,
-    });
-  }
-  next();
-});
 
 server.start(() =>
   // eslint-disable-next-line
