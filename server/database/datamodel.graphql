@@ -10,4 +10,19 @@ type User implements Node {
   lastName: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  chatRooms: [ChatRoom!]!
+}
+
+type ChatRoom implements Node {
+  id: ID! @unique
+  users: [User!]!
+  messages: [Message!]!
+}
+
+type Message implements Node {
+  id: ID! @unique
+  body: String!
+  createdAt: DateTime!
+  chatRoom: ChatRoom!
+  author: User!
 }

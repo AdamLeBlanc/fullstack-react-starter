@@ -39,6 +39,7 @@ server.express.use(
 );
 
 server.express.use(server.options.endpoint, async (req, res, next) => {
+  console.log(req.sessio);
   if (!req.session.userId) {
     return next();
   }

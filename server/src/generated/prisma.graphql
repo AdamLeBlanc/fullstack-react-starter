@@ -1,5 +1,13 @@
 # source: http://127.0.0.1:4466
-# timestamp: Sun Jul 22 2018 22:43:14 GMT-0300 (ADT)
+# timestamp: Sun Jul 22 2018 23:55:16 GMT-0300 (ADT)
+
+type AggregateChatRoom {
+  count: Int!
+}
+
+type AggregateMessage {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -10,6 +18,213 @@ type BatchPayload {
   count: Long!
 }
 
+type ChatRoom implements Node {
+  id: ID!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+}
+
+"""A connection to a list of items."""
+type ChatRoomConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ChatRoomEdge]!
+  aggregate: AggregateChatRoom!
+}
+
+input ChatRoomCreateInput {
+  users: UserCreateManyWithoutChatRoomsInput
+  messages: MessageCreateManyWithoutChatRoomInput
+}
+
+input ChatRoomCreateManyWithoutUsersInput {
+  create: [ChatRoomCreateWithoutUsersInput!]
+  connect: [ChatRoomWhereUniqueInput!]
+}
+
+input ChatRoomCreateOneWithoutMessagesInput {
+  create: ChatRoomCreateWithoutMessagesInput
+  connect: ChatRoomWhereUniqueInput
+}
+
+input ChatRoomCreateWithoutMessagesInput {
+  users: UserCreateManyWithoutChatRoomsInput
+}
+
+input ChatRoomCreateWithoutUsersInput {
+  messages: MessageCreateManyWithoutChatRoomInput
+}
+
+"""An edge in a connection."""
+type ChatRoomEdge {
+  """The item at the end of the edge."""
+  node: ChatRoom!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ChatRoomOrderByInput {
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ChatRoomPreviousValues {
+  id: ID!
+}
+
+type ChatRoomSubscriptionPayload {
+  mutation: MutationType!
+  node: ChatRoom
+  updatedFields: [String!]
+  previousValues: ChatRoomPreviousValues
+}
+
+input ChatRoomSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChatRoomSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChatRoomSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChatRoomSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ChatRoomWhereInput
+}
+
+input ChatRoomUpdateInput {
+  users: UserUpdateManyWithoutChatRoomsInput
+  messages: MessageUpdateManyWithoutChatRoomInput
+}
+
+input ChatRoomUpdateManyWithoutUsersInput {
+  create: [ChatRoomCreateWithoutUsersInput!]
+  connect: [ChatRoomWhereUniqueInput!]
+  disconnect: [ChatRoomWhereUniqueInput!]
+  delete: [ChatRoomWhereUniqueInput!]
+  update: [ChatRoomUpdateWithWhereUniqueWithoutUsersInput!]
+  upsert: [ChatRoomUpsertWithWhereUniqueWithoutUsersInput!]
+}
+
+input ChatRoomUpdateOneWithoutMessagesInput {
+  create: ChatRoomCreateWithoutMessagesInput
+  connect: ChatRoomWhereUniqueInput
+  delete: Boolean
+  update: ChatRoomUpdateWithoutMessagesDataInput
+  upsert: ChatRoomUpsertWithoutMessagesInput
+}
+
+input ChatRoomUpdateWithoutMessagesDataInput {
+  users: UserUpdateManyWithoutChatRoomsInput
+}
+
+input ChatRoomUpdateWithoutUsersDataInput {
+  messages: MessageUpdateManyWithoutChatRoomInput
+}
+
+input ChatRoomUpdateWithWhereUniqueWithoutUsersInput {
+  where: ChatRoomWhereUniqueInput!
+  data: ChatRoomUpdateWithoutUsersDataInput!
+}
+
+input ChatRoomUpsertWithoutMessagesInput {
+  update: ChatRoomUpdateWithoutMessagesDataInput!
+  create: ChatRoomCreateWithoutMessagesInput!
+}
+
+input ChatRoomUpsertWithWhereUniqueWithoutUsersInput {
+  where: ChatRoomWhereUniqueInput!
+  update: ChatRoomUpdateWithoutUsersDataInput!
+  create: ChatRoomCreateWithoutUsersInput!
+}
+
+input ChatRoomWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChatRoomWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChatRoomWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChatRoomWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+}
+
+input ChatRoomWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 """
@@ -18,12 +233,273 @@ Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
 
+type Message implements Node {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  chatRoom(where: ChatRoomWhereInput): ChatRoom!
+  author(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type MessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  body: String!
+  chatRoom: ChatRoomCreateOneWithoutMessagesInput!
+  author: UserCreateOneInput!
+}
+
+input MessageCreateManyWithoutChatRoomInput {
+  create: [MessageCreateWithoutChatRoomInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutChatRoomInput {
+  body: String!
+  author: UserCreateOneInput!
+}
+
+"""An edge in a connection."""
+type MessageEdge {
+  """The item at the end of the edge."""
+  node: Message!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  body_ASC
+  body_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+}
+
+input MessageUpdateInput {
+  body: String
+  chatRoom: ChatRoomUpdateOneWithoutMessagesInput
+  author: UserUpdateOneInput
+}
+
+input MessageUpdateManyWithoutChatRoomInput {
+  create: [MessageCreateWithoutChatRoomInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutChatRoomInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutChatRoomInput!]
+}
+
+input MessageUpdateWithoutChatRoomDataInput {
+  body: String
+  author: UserUpdateOneInput
+}
+
+input MessageUpdateWithWhereUniqueWithoutChatRoomInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutChatRoomDataInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutChatRoomInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutChatRoomDataInput!
+  create: MessageCreateWithoutChatRoomInput!
+}
+
+input MessageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  body: String
+
+  """All values that are not equal to given value."""
+  body_not: String
+
+  """All values that are contained in given list."""
+  body_in: [String!]
+
+  """All values that are not contained in given list."""
+  body_not_in: [String!]
+
+  """All values less than the given value."""
+  body_lt: String
+
+  """All values less than or equal the given value."""
+  body_lte: String
+
+  """All values greater than the given value."""
+  body_gt: String
+
+  """All values greater than or equal the given value."""
+  body_gte: String
+
+  """All values containing the given string."""
+  body_contains: String
+
+  """All values not containing the given string."""
+  body_not_contains: String
+
+  """All values starting with the given string."""
+  body_starts_with: String
+
+  """All values not starting with the given string."""
+  body_not_starts_with: String
+
+  """All values ending with the given string."""
+  body_ends_with: String
+
+  """All values not ending with the given string."""
+  body_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  chatRoom: ChatRoomWhereInput
+  author: UserWhereInput
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
+  createChatRoom(data: ChatRoomCreateInput!): ChatRoom!
+  createMessage(data: MessageCreateInput!): Message!
   createUser(data: UserCreateInput!): User!
+  updateChatRoom(data: ChatRoomUpdateInput!, where: ChatRoomWhereUniqueInput!): ChatRoom
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteChatRoom(where: ChatRoomWhereUniqueInput!): ChatRoom
+  deleteMessage(where: MessageWhereUniqueInput!): Message
   deleteUser(where: UserWhereUniqueInput!): User
+  upsertChatRoom(where: ChatRoomWhereUniqueInput!, create: ChatRoomCreateInput!, update: ChatRoomUpdateInput!): ChatRoom!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyChatRooms(data: ChatRoomUpdateInput!, where: ChatRoomWhereInput): BatchPayload!
+  updateManyMessages(data: MessageUpdateInput!, where: MessageWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  deleteManyChatRooms(where: ChatRoomWhereInput): BatchPayload!
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -55,8 +531,14 @@ type PageInfo {
 }
 
 type Query {
+  chatRooms(where: ChatRoomWhereInput, orderBy: ChatRoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChatRoom]!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  chatRoom(where: ChatRoomWhereUniqueInput!): ChatRoom
+  message(where: MessageWhereUniqueInput!): Message
   user(where: UserWhereUniqueInput!): User
+  chatRoomsConnection(where: ChatRoomWhereInput, orderBy: ChatRoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChatRoomConnection!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -67,6 +549,8 @@ type Query {
 }
 
 type Subscription {
+  chatRoom(where: ChatRoomSubscriptionWhereInput): ChatRoomSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -78,6 +562,7 @@ type User implements Node {
   lastName: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  chatRooms(where: ChatRoomWhereInput, orderBy: ChatRoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChatRoom!]
 }
 
 """A connection to a list of items."""
@@ -91,6 +576,24 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  chatRooms: ChatRoomCreateManyWithoutUsersInput
+}
+
+input UserCreateManyWithoutChatRoomsInput {
+  create: [UserCreateWithoutChatRoomsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutChatRoomsInput {
   email: String!
   password: String!
   firstName: String!
@@ -172,11 +675,60 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  chatRooms: ChatRoomUpdateManyWithoutUsersInput
+}
+
 input UserUpdateInput {
   email: String
   password: String
   firstName: String
   lastName: String
+  chatRooms: ChatRoomUpdateManyWithoutUsersInput
+}
+
+input UserUpdateManyWithoutChatRoomsInput {
+  create: [UserCreateWithoutChatRoomsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutChatRoomsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutChatRoomsInput!]
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+}
+
+input UserUpdateWithoutChatRoomsDataInput {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+}
+
+input UserUpdateWithWhereUniqueWithoutChatRoomsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutChatRoomsDataInput!
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutChatRoomsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutChatRoomsDataInput!
+  create: UserCreateWithoutChatRoomsInput!
 }
 
 input UserWhereInput {
@@ -432,6 +984,12 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  chatRooms_every: ChatRoomWhereInput
+  chatRooms_some: ChatRoomWhereInput
+  chatRooms_none: ChatRoomWhereInput
+  _MagicalBackRelation_MessageToUser_every: MessageWhereInput
+  _MagicalBackRelation_MessageToUser_some: MessageWhereInput
+  _MagicalBackRelation_MessageToUser_none: MessageWhereInput
 }
 
 input UserWhereUniqueInput {
