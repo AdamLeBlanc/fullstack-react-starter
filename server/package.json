@@ -2,7 +2,10 @@
   "name": "fullstack-react-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
+  "engines": {
+      "node": ">=8.11.3 <9.0.0"
+  },
   "scripts": {
     "start": "nodemon -e js,graphql,yml,json ./src/index.js",
     "up:dev": "docker-compose up -d",
@@ -16,7 +19,9 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^6.0.0",
     "express-session": "^1.15.6",
+    "graphql": "^0.13.2",
     "graphql-cli": "^2.16.4",
+    "graphql-tools": "^3.0.5",
     "graphql-yoga": "^1.14.12",
     "nodemon": "^1.18.3",
     "prisma": "^1.12.0",

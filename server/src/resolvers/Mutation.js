@@ -41,9 +41,28 @@ function sendMessage(parents, args, context, info) {
   );
 }
 
+function joinChatRoom(preant, args, context, info) {
+  return context.db.mutation.updateChatRoom(
+    {
+      where: { id: args.chatRoomId },
+      data: { users: { connect: { id: context.user.id } } },
+    },
+    info
+  );
+}
+
+function leaveChatRoom(parent, args, context, info) {
+  return context.db.mutation.updateUser({
+    where: { id: context.user.id },
+    data: { chatRooms: { disconnect: { id: args.chatRoomId } } },
+  });
+}
+
 module.exports = {
   signup,
   signin,
   createChatRoom,
   sendMessage,
+  joinChatRoom,
+  leaveChatRoom,
 };

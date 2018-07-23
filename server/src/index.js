@@ -3,7 +3,7 @@ const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
 const session = require('express-session');
 const resolvers = require('./resolvers');
-
+const directiveResolvers = require('./directives');
 const PRISMA_ENDPOINT = process.env.PRISMA_ENDPOINT;
 const PRISMA_SECRET = process.env.PRISMA_SECRET;
 
@@ -17,6 +17,7 @@ const db = new Prisma({
 const server = new GraphQLServer({
   typeDefs: './src//schema.graphql',
   resolvers,
+  schemaDirectives: { ...directiveResolvers },
   context: req => ({
     db,
     req: req.request,
@@ -39,7 +40,6 @@ server.express.use(
 );
 
 server.express.use(server.options.endpoint, async (req, res, next) => {
-  console.log(req.sessio);
   if (!req.session.userId) {
     return next();
   }

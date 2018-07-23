@@ -1,5 +1,7 @@
 #import Node, ChatRoom from "./generated/prisma.graphql"
 
+directive @auth on FIELD | FIELD_DEFINITION | OBJECT
+
 type Query {
   user(id: ID!): User
   viewer: User!
@@ -13,8 +15,12 @@ type Mutation {
     password: String!
   ): User!
   signin(email: String!, password: String!): User!
-  createChatRoom(name: String!): ChatRoom!
-  sendMessage(chatRoomId: ID!, body: String!): Message!
+
+  createChatRoom(name: String!): ChatRoom! @auth
+  joinChatRoom(chatRoomId: ID!): ChatRoom @auth
+  leaveChatRoom(chatRoomId: ID!): User! @auth
+
+  sendMessage(chatRoomId: ID!, body: String!): Message! @auth
 }
 
 type User implements Node {
@@ -22,5 +28,5 @@ type User implements Node {
   firstName: String!
   lastName: String!
   email: String!
-  chatRooms: [ChatRoom!]
+  chatRooms: [ChatRoom!] @auth
 }
