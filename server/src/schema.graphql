@@ -1,4 +1,4 @@
-#import Node, ChatRoom from "./generated/prisma.graphql"
+#import Node, ChatRoom, MessageSubscriptionPayload from "./generated/prisma.graphql"
 
 directive @auth on FIELD | FIELD_DEFINITION | OBJECT
 
@@ -15,7 +15,16 @@ type Mutation {
   joinChatRoom(chatRoomId: ID!): ChatRoom @auth
   leaveChatRoom(chatRoomId: ID!): User! @auth
 
-  sendMessage(chatRoomId: ID!, body: String!): Message! @auth
+  sendMessage(input: MessageInput!): Message! @auth
+}
+
+type Subscription @auth {
+  newMessage: MessageSubscriptionPayload
+}
+
+input MessageInput {
+  chatRoomId: ID!
+  body: String!
 }
 
 input SigninInput {
