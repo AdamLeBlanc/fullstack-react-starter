@@ -10,13 +10,13 @@ type User implements Node {
   lastName: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  chatRooms: [ChatRoom!]!
+  chatRooms: [ChatRoom!]! @relation(name: "UsersInCharRoom")
 }
 
 type ChatRoom implements Node {
   id: ID! @unique
-  users: [User!]!
-  messages: [Message!]!
+  users: [User!]! @relation(name: "UsersInCharRoom")
+  messages: [Message!]! @relation(name: "ChatRoomMessages", onDelete: CASCADE)
   name: String!
 }
 
@@ -24,6 +24,6 @@ type Message implements Node {
   id: ID! @unique
   body: String!
   createdAt: DateTime!
-  chatRoom: ChatRoom!
+  chatRoom: ChatRoom! @relation(name: "ChatRoomMessages")
   author: User!
 }
