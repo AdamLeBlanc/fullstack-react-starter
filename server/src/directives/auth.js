@@ -2,22 +2,32 @@ const { SchemaDirectiveVisitor } = require('graphql-tools');
 const { defaultFieldResolver } = require('graphql');
 
 class AuthDirective extends SchemaDirectiveVisitor {
-  visitFieldDefinition(field) {
-    this.wrapField(field);
-  }
   visitObject(type) {
-    const fields = type.getFields();
-    Object.keys(fields).forEach(fieldName => this.wrapField(fields[fieldName]));
+    this.wrappObject(type);
   }
 
-  wrapField(field) {
+  visitFieldDefinition(field, details) {
+    this.wrappField(field, details.objectType);
+  }
+
+  wrappField(field, objectType) {
+    if (objectType._authWrapped) return;
+    objectType._authWrapped = true;
     const { resolve = defaultFieldResolver } = field;
-    const skip = this.args.skip;
-    field.resolve = async (parent, args, context, info) => {
-      if (!context.user && !skip) throw new Error('Authentication required');
-      const result = await resolve(parent, args, context, info);
-      return result;
+    field.resolve = (...args) => {
+      if (args[2].user) return resolve.apply(this, args);
+
+      throw new Error('Requires Authentication');
     };
+  }
+
+  wrappObject(objectType) {
+    const fields = objectType.getFields();
+    const keys = Object.keys(fields);
+    keys.forEach(fieldName => {
+      const field = fields[fieldName];
+      this.wrappField(field, objectType);
+    });
   }
 }
 
