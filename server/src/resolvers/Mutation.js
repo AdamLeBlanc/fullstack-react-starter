@@ -12,7 +12,7 @@ async function signin(parent, args, context) {
     input: { email, password },
   } = args;
   const user = await db.query.user({ where: { email } });
-  const valid = user ? bcrypt.compare(password, user.password) : false;
+  const valid = bcrypt.compare(password, user.password);
   if (!valid) throw new Error('Wrong email/password');
   req.session.userId = user.id;
   return user;
