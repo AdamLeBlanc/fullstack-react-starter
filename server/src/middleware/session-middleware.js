@@ -12,6 +12,6 @@ module.exports = session({
   },
   store: new RedisStore({
     host: 'localhost',
-    port: '6379',
+    port: 6379,
   }),
 });
