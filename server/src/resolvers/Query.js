@@ -1,9 +1,10 @@
-function user(parent, args, context, info) {
+function user(parent, args, context) {
   return context.db.query.user({ where: { id: args.id } });
 }
 
-async function viewer(parent, args, { db, user }, info) {
+function viewer(parent, args, { user }) {
   if (user) return user;
+  return null;
 }
 
 module.exports = {
