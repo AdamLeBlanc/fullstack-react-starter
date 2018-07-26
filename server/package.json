@@ -25,7 +25,7 @@
     "dotenv": "^6.0.0",
     "express-session": "^1.15.6",
     "graphql": "^0.13.2",
-    "graphql-cli": "^2.16.4",
+    "graphql-cli": "^2.16.5",
     "graphql-import": "^0.6.0",
     "graphql-tools": "^3.0.5",
     "graphql-yoga": "^1.14.12",
