@@ -50,8 +50,9 @@ server.start(
         const session = await JSON.parse(
           await redisClient.getAsync(`sess:${cookie['connect.sid']}`)
         );
-        if (!session) throw new Error('Authentication required');
-        const user = db.query.user({ where: { id: session.userId } });
+        const user = session
+          ? db.query.user({ where: { id: session.userId } })
+          : null;
         if (!user) throw new Error('Authentication Required');
         return {
           user: user,
