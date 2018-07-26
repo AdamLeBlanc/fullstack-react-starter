@@ -4,10 +4,10 @@ module.exports = (db, server) => async (req, res, next) => {
     where: { id: req.session.userId },
   });
 
-  if (user) {
-    const old = server.context;
-    server.context = req => ({
-      ...old(req),
+  if (!!user) {
+    const old = server.context({ request: req });
+    server.context = ({ request, connection }) => ({
+      ...old,
       user,
     });
   }
