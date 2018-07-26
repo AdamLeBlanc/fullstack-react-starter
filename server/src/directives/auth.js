@@ -6,13 +6,11 @@ class AuthDirective extends SchemaDirectiveVisitor {
     this.wrappObject(type);
   }
 
-  visitFieldDefinition(field, details) {
-    this.wrappField(field, details.objectType);
+  visitFieldDefinition(field) {
+    this.wrappField(field);
   }
 
-  wrappField(field, objectType) {
-    if (objectType._authWrapped) return;
-    objectType._authWrapped = true;
+  wrappField(field) {
     const { resolve = defaultFieldResolver } = field;
     field.resolve = (...args) => {
       if (args[2].user) return resolve.apply(this, args);
@@ -22,6 +20,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
   }
 
   wrappObject(objectType) {
+    if (objectType._authWrapped) return;
+    objectType._authWrapped = true;
     const fields = objectType.getFields();
     const keys = Object.keys(fields);
     keys.forEach(fieldName => {
