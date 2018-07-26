@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "nodemon -e js,graphql,yml,json ./src/index.js",
+    "debug": "nodemon --inspect-brk=9229 -e js,graphql,yml,json ./src/index.js",
     "up:dev": "docker-compose up -d",
     "down:dev": "docker-compose down",
     "db:reset": "prisma reset --env-file .env",
@@ -19,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
     "connect-redis": "^3.3.3",
     "dotenv": "^6.0.0",
     "express-session": "^1.15.6",
