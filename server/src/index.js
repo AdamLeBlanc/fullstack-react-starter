@@ -1,11 +1,11 @@
 require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
-const nodeCookie = require('node-cookie');
 const resolvers = require('./resolvers');
 const directiveResolvers = require('./directives');
 const sessionMiddleware = require('./middleware/session-middleware');
 const authMiddleware = require('./middleware/auth-middleware');
+const subscriptionAuth = require('./utils/user-from-websocket');
 const PRISMA_ENDPOINT = process.env.PRISMA_ENDPOINT;
 const PRISMA_SECRET = process.env.PRISMA_SECRET;
 
@@ -17,6 +17,7 @@ const db = new Prisma({
 });
 
 const server = new GraphQLServer({
+  debug: true,
   typeDefs: './src//schema.graphql',
   resolvers,
   schemaDirectives: { ...directiveResolvers },
@@ -45,19 +46,7 @@ const redisClient = require('./utils/RedisClient')();
 server.start(
   {
     subscriptions: {
-      onConnect: async (connectionParams, webSocket) => {
-        const cookie = nodeCookie.parse(webSocket.upgradeReq, 'shhhhhhh');
-        const session = await JSON.parse(
-          await redisClient.getAsync(`sess:${cookie['connect.sid']}`)
-        );
-        const user = session
-          ? db.query.user({ where: { id: session.userId } })
-          : null;
-        if (!user) throw new Error('Authentication Required');
-        return {
-          user: user,
-        };
-      },
+      onConnect: subscriptionAuth(db),
     },
   },
   () =>
